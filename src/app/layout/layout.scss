@@ -1,0 +1,15 @@
+/* Estilos básicos para el layout */
+.h-screen {
+  height: 100vh;
+}
+
+/* Estilo para el enlace activo en el menú lateral */
+.active-link {
+  background-color: #e0e0e0; /* Un gris claro para el fondo */
+  color: #3f51b5; /* Color primario para el texto/iconos */
+  border-radius: 4px;
+}
+
+.mat-drawer-content {
+  overflow: auto; /* Permite scroll solo en el contenido principal si es necesario */
+}

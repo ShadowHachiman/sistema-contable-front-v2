@@ -1,0 +1,62 @@
+// src/app/reports/reports.scss
+
+.reports-container {
+  padding: 20px;
+}
+
+mat-card {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.report-content {
+  padding-top: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.currency-cell {
+  text-align: right;
+  font-family: monospace;
+}
+
+// Estilo para el footer del Balance
+.mat-footer-row {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+// Estilos del Libro Mayor
+.ledger-form {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.account-selector {
+  flex: 0 0 400px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.balance-highlight {
+  font-weight: 600;
+  color: #004d40; /* Color verde oscuro para el saldo */
+}
+
+.no-data-message {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+}

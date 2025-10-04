@@ -1,0 +1,65 @@
+<div class="form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon color="primary">{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+        {{ isEditMode ? 'Modificar Cuenta' : 'Crear Nueva Cuenta' }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <mat-form-field appearance="outline" class="col-50">
+            <mat-label>Código</mat-label>
+            <input matInput formControlName="code" placeholder="Ej: 1.01.01" required>
+            <mat-hint>Código único (ej: 1.01.01)</mat-hint>
+            <mat-error *ngIf="accountForm.get('code')?.hasError('required')">
+              El código es obligatorio.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="col-50">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Caja y Bancos" required>
+            <mat-error *ngIf="accountForm.get('name')?.hasError('required')">
+              El nombre es obligatorio.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cuenta Padre (Solo Cuentas de Título)</mat-label>
+          <mat-select formControlName="parentId">
+            <mat-option [value]="null">--- (Primer Nivel) ---</mat-option>
+            <mat-option *ngFor="let account of parentAccounts$ | async" [value]="account.id">
+              ({{ account.code }}) {{ account.name }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Dejar vacío para cuentas de primer nivel (ej: Activo).</mat-hint>
+        </mat-form-field>
+
+        <mat-divider></mat-divider>
+
+        <div class="row-checkboxes">
+          <mat-checkbox formControlName="isImputable" color="primary">
+            Imputable (Permite Asientos)
+          </mat-checkbox>
+
+          <mat-checkbox formControlName="active" color="primary">
+            Activa
+          </mat-checkbox>
+        </div>
+
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="accountForm.invalid">
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon> Guardar Cuenta
+        </button>
+
+        <button mat-button type="button" routerLink="/accounts/tree" class="ml-10">
+          Cancelar
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

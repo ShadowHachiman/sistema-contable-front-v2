@@ -1,0 +1,130 @@
+<div class="journal-entry-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon color="primary">money</mat-icon> Registro de Asiento Contable
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="journalEntryForm" (ngSubmit)="onSubmit()">
+
+        <div class="header-row">
+          <mat-form-field appearance="outline" class="col-date">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" required>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="journalEntryForm.get('date')?.invalid">Fecha requerida.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="col-description">
+            <mat-label>Descripción General</mat-label>
+            <input matInput formControlName="description" placeholder="Ej: Venta de mercancía" required>
+            <mat-error *ngIf="journalEntryForm.get('description')?.invalid">Descripción requerida.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3 class="details-title">Detalles (Partida Doble)</h3>
+
+        <div formArrayName="details" class="details-table-wrapper">
+          <table mat-table [dataSource]="detailsFormArray.controls" class="full-width">
+
+            <ng-container matColumnDef="account">
+              <th mat-header-cell *matHeaderCellDef> Cuenta (Imputable) </th>
+              <td mat-cell *matCellDef="let element; let i = index" [formGroupName]="i">
+                <mat-form-field appearance="fill" class="account-select-field">
+                  <mat-select formControlName="accountId" required>
+                    <mat-option *ngFor="let acc of imputableAccounts" [value]="acc.id">
+                      ({{ acc.code }}) {{ acc.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>Requerida</mat-error>
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef> Concepto </th>
+              <td mat-cell *matCellDef="let element; let i = index" [formGroupName]="i">
+                <mat-form-field appearance="fill" class="description-input-field">
+                  <input matInput formControlName="description" required>
+                  <mat-error>Requerida</mat-error>
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> Total: </td>
+            </ng-container>
+
+            <ng-container matColumnDef="debit">
+              <th mat-header-cell *matHeaderCellDef> DEBE </th>
+              <td mat-cell *matCellDef="let element; let i = index" [formGroupName]="i">
+                <mat-form-field appearance="fill">
+                  <input matInput type="number" formControlName="debit" min="0"
+                         (blur)="element.get('credit').setValue(0)">
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef [ngClass]="{'unbalanced': totalDebit !== totalCredit}">
+                **{{ totalDebit | number:'1.2-2' }}**
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="credit">
+              <th mat-header-cell *matHeaderCellDef> HABER </th>
+              <td mat-cell *matCellDef="let element; let i = index" [formGroupName]="i">
+                <mat-form-field appearance="fill">
+                  <input matInput type="number" formControlName="credit" min="0"
+                         (blur)="element.get('debit').setValue(0)">
+                </mat-form-field>
+              </td>
+              <td mat-footer-cell *matFooterCellDef [ngClass]="{'unbalanced': totalDebit !== totalCredit}">
+                **{{ totalCredit | number:'1.2-2' }}**
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element; let i = index">
+                <button mat-icon-button color="warn" (click)="removeDetailRow(i)"
+                        [disabled]="detailsFormArray.length <= 2" type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+              <td mat-footer-cell *matFooterCellDef>
+                                <span class="balance-status" [ngClass]="{'success': totalDebit === totalCredit, 'error': totalDebit !== totalCredit}">
+                                    {{ totalDebit === totalCredit ? 'CUADRADO' : 'DIFERENCIA' }}
+                                </span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+          </table>
+        </div>
+
+        <button mat-flat-button color="accent" (click)="addDetailRow()" type="button" class="add-row-button">
+          <mat-icon>add</mat-icon> Añadir Línea
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <div class="submit-section">
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="journalEntryForm.invalid" class="submit-button">
+            <mat-icon>send</mat-icon> Registrar Asiento
+          </button>
+          <span *ngIf="journalEntryForm.hasError('unbalanced', 'details')" class="error-message">
+                        ⚠️ El Debe ({{ totalDebit | number:'1.2-2' }}) debe ser igual al Haber ({{ totalCredit | number:'1.2-2' }})
+                    </span>
+          <span *ngIf="journalEntryForm.hasError('minTwoLines', 'details')" class="error-message">
+                        ⚠️ Un asiento requiere al menos dos líneas.
+                    </span>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

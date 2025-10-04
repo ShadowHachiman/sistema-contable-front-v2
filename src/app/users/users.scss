@@ -1,0 +1,46 @@
+// src/app/users/users.scss
+
+.users-container {
+  padding: 20px;
+}
+
+mat-card {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4em;
+  margin-bottom: 15px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.no-data-message {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+}
+
+.role-admin {
+  font-weight: bold;
+  color: #d84315; /* Naranja oscuro */
+}
+
+.role-user {
+  font-weight: normal;
+  color: #1976d2; /* Azul */
+}
+
+.full-width {
+  width: 100%;
+}

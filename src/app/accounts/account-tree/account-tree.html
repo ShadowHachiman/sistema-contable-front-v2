@@ -1,0 +1,51 @@
+<mat-card class="m-4 shadow-lg">
+  <mat-card-header>
+    <mat-card-title>
+      Plan de Cuentas (Estructura Anidada)
+    </mat-card-title>
+    <mat-card-subtitle>Visualización jerárquica de las cuentas contables.</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-content class="p-4">
+    <!-- El contenedor mat-tree que utiliza tu treeControl y dataSource -->
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+      <!-- 1. Template para Nodos con Hijos (Usando matTreeNodeDef y mat-nested-tree-node) -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div class="mat-tree-node" style="min-height: 48px;">
+          <!-- Botón de expansión/colapso del nodo -->
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+
+          <!-- Contenido del nodo (Código - Nombre) -->
+          <span class="font-bold mr-2">{{ node.code }}</span>
+          <span>{{ node.name }}</span>
+        </div>
+
+        <!-- 🛑 CORRECCIÓN CLAVE: Usamos la directiva matTreeNodeOutlet
+             en el div contenedor para que Angular sepa dónde anidar los hijos.
+             Esto soluciona el error NG8001. -->
+        <div [class.tree-invisible]="!treeControl.isExpanded(node)" role="group" matTreeNodeOutlet>
+        </div>
+      </mat-nested-tree-node>
+
+      <!-- 2. Template para Nodos Hoja (Sin Hijos) -->
+      <mat-tree-node *matTreeNodeDef="let node">
+        <div class="mat-tree-node" style="min-height: 48px;">
+          <!-- Espacio para alinear con los nodos expandibles -->
+          <button mat-icon-button disabled></button>
+
+          <!-- Contenido del nodo hoja -->
+          <span class="text-sm text-gray-600 mr-2">{{ node.code }}</span>
+          <span class="text-sm">{{ node.name }}</span>
+        </div>
+      </mat-tree-node>
+
+    </mat-tree>
+  </mat-card-content>
+</mat-card>

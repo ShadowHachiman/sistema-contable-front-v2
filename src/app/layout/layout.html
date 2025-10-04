@@ -1,0 +1,79 @@
+<mat-sidenav-container class="h-screen">
+
+  <!-- =============================== -->
+  <!-- 1. Sidenav (Menú Lateral) -->
+  <!-- =============================== -->
+  <mat-sidenav #sidenav mode="side" opened class="w-64 p-4 shadow-xl">
+    <div class="logo-area mb-6 text-center">
+      <h2 class="text-xl font-bold text-primary">ContableApp</h2>
+      <mat-divider></mat-divider>
+    </div>
+
+    <!-- Lista de Navegación -->
+    <mat-nav-list>
+      <!-- Enlaces principales con RouterLink -->
+      <a mat-list-item routerLink="/home" routerLinkActive="active-link">
+        <mat-icon>home</mat-icon>
+        <span class="ml-4">Inicio</span>
+      </a>
+      <a mat-list-item routerLink="/accounts/tree" routerLinkActive="active-link">
+        <mat-icon>account_tree</mat-icon>
+        <span class="ml-4">Plan de Cuentas</span>
+      </a>
+      <a mat-list-item routerLink="/entries" routerLinkActive="active-link">
+        <mat-icon>receipt</mat-icon>
+        <span class="ml-4">Asientos Contables</span>
+      </a>
+      <a mat-list-item routerLink="/reports" routerLinkActive="active-link">
+        <mat-icon>assessment</mat-icon>
+        <span class="ml-4">Reportes</span>
+      </a>
+
+      <!-- Separador -->
+      <mat-divider class="my-3"></mat-divider>
+
+      <!-- Enlace de Gestión (solo para administradores, si aplicara) -->
+      <a mat-list-item routerLink="/users" routerLinkActive="active-link">
+        <mat-icon>settings</mat-icon>
+        <span class="ml-4">Gestión de Usuarios</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- =============================== -->
+  <!-- 2. Contenido Principal -->
+  <!-- =============================== -->
+  <mat-sidenav-content>
+    <!-- Toolbar Superior -->
+    <mat-toolbar color="primary" class="shadow-md sticky top-0 z-10">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="text-lg font-semibold ml-4">Sistema Contable</span>
+      <span class="flex-auto"></span> <!-- Spacer -->
+
+      <!-- Menú de Usuario -->
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <!-- Puedes mostrar el nombre de usuario aquí usando authService.currentUser?.username -->
+        <button mat-menu-item disabled>
+          <mat-icon>person</mat-icon>
+          <span>Usuario</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="authService.logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <!-- Contenedor de Vistas/Rutas -->
+    <main class="p-6">
+      <router-outlet></router-outlet> <!-- AQUÍ SE CARGARÁN TUS VISTAS -->
+    </main>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

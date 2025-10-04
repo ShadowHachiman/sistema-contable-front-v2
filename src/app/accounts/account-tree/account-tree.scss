@@ -1,0 +1,10 @@
+/* Estilo básico para ocultar los hijos cuando el nodo está colapsado */
+.tree-invisible {
+  display: none;
+}
+
+/* Opcional: Estilo para la indentación */
+.mat-tree-node {
+  /* Añade indentación para los nodos internos */
+  padding-left: 10px;
+}
