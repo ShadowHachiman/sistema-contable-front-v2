@@ -63,7 +63,6 @@ export class AccountTreeComponent implements OnInit {
 
   hasChild = (_: number, node: AccountFlatNode) => node.expandable;
 
-  // Método para manejar la creación de cuentas (si el rol es ADMIN)
   manageAccounts(): void {
     // Lógica para navegar a /accounts/manage
     console.log('Navegando a la gestión de cuentas...');
